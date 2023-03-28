@@ -1,7 +1,12 @@
 //{"ip":"50.71.110.119"}
 
 // index.js
-const { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes,  nextISSTimesForMyLocation } = require("./iss");
+const {
+  fetchMyIP,
+  fetchCoordsByIP,
+  fetchISSFlyOverTimes,
+  nextISSTimesForMyLocation,
+} = require("./iss");
 // const { nextISSTimesForMyLocation } = require("./iss");
 
 fetchMyIP((error, ip) => {
@@ -36,8 +41,7 @@ fetchISSFlyOverTimes(exampleCoords, (error, passTimes) => {
   console.log("It worked! Returned flyover times:", passTimes);
 });
 
-
-const printPassTimes = function(passTimes) {
+const printPassTimes = function (passTimes) {
   for (const pass of passTimes) {
     const datetime = new Date(0);
     datetime.setUTCSeconds(pass.risetime);
