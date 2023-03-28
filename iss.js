@@ -7,26 +7,25 @@
  *   - The IP address as a string (null if error). Example: "162.245.144.188"
  */
 
-const request = require('request')
-Ip = `https://api.ipify.org/?format=json`
+const request = require("request");
+Ip = `https://api.ipify.org/?format=json`;
 
-const fetchMyIP = function(callback) { 
+const fetchMyIP = function (callback) {
   // use request to fetch IP address from JSON API
   request(Ip, (error, response, body) => {
-if (error){
-  callback(error, null)
-  return;
-}
-if (response.statusCode !== 200) {
-  const msg = `Status Code ${response.statusCode} when fetching IP. Response: ${body}`;
-  callback(Error(msg), null);
-  return;
-}
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    if (response.statusCode !== 200) {
+      const msg = `Status Code ${response.statusCode} when fetching IP. Response: ${body}`;
+      callback(Error(msg), null);
+      return;
+    }
 
-const data = JSON.parse(body);
-callback(null, data.ip);
-
-})
-}
+    const data = JSON.parse(body);
+    callback(null, data.ip);
+  });
+};
 
 module.exports = { fetchMyIP };
