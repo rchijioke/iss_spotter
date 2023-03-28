@@ -8,11 +8,11 @@
  */
 
 const request = require("request");
-Ip = `https://api.ipify.org/?format=json`;
+ip = `https://api.ipify.org/?format=json`;
 
-const fetchMyIP = function (callback) {
+const fetchMyIp = function (callback) {
   // use request to fetch IP address from JSON API
-  request(Ip, (error, response, body) => {
+  request(ip, (error, response, body) => {
     if (error) {
       callback(error, null);
       return;
@@ -28,4 +28,25 @@ const fetchMyIP = function (callback) {
   });
 };
 
-module.exports = { fetchMyIP };
+apiUrl = `http://ipwho.is/`
+const fetchCoordsByIP = function (iP,callback) {
+request(apiUrl + iP,(error, response, body) => {
+  if (error) {
+    callback(error, null);
+    return;
+};
+const parsedBody = JSON.parse(body);
+
+// check if "success" is true or not
+if (!parsedBody.success) {
+  const message = `Success status was ${parsedBody.success}. Server message says: ${parsedBody.message} when fetching for IP ${parsedBody.ip}`;
+  callback(Error(message), null);
+  return;
+}
+let parsedLat = parsedBody.latitude
+let parsedLong = parsedBody.longitude
+const result = "{latitude: " + parsedLat + ", longitude: "+ parsedLong + " }"; 
+callback(null, result)
+})
+}
+module.exports =  {fetchMyIp, fetchCoordsByIP}
