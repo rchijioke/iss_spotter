@@ -28,27 +28,28 @@ const fetchMyIp = function (callback) {
   });
 };
 
-apiUrl = `http://ipwho.is/`
-const fetchCoordsByIP = function (iP,callback) {
-request(apiUrl + iP,(error, response, body) => {
-  if (error) {
-    callback(error, null);
-    return;
-};
-const parsedBody = JSON.parse(body);
+apiUrl = `http://ipwho.is/`;
+const fetchCoordsByIP = function (iP, callback) {
+  request(apiUrl + iP, (error, response, body) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    const parsedBody = JSON.parse(body);
 
-// check if "success" is true or not
-if (!parsedBody.success) {
-  const message = `Success status was ${parsedBody.success}. Server message says: ${parsedBody.message} when fetching for IP ${parsedBody.ip}`;
-  callback(Error(message), null);
-  return;
-}
-let parsedLat = parsedBody.latitude
-let parsedLong = parsedBody.longitude
-const result = "{latitude: " + parsedLat + ", longitude: "+ parsedLong + " }"; 
-callback(null, result)
-})
-}
+    // check if "success" is true or not
+    if (!parsedBody.success) {
+      const message = `Success status was ${parsedBody.success}. Server message says: ${parsedBody.message} when fetching for IP ${parsedBody.ip}`;
+      callback(Error(message), null);
+      return;
+    }
+    let parsedLat = parsedBody.latitude;
+    let parsedLong = parsedBody.longitude;
+    const result =
+      "{latitude: " + parsedLat + ", longitude: " + parsedLong + " }";
+    callback(null, result);
+  });
+};
 
 /**
  * Makes a single API request to retrieve upcoming ISS fly over times the for the given lat/lng coordinates.
@@ -60,7 +61,7 @@ callback(null, result)
  *   - The fly over times as an array of objects (null if error). Example:
  *     [ { risetime: 134564234, duration: 600 }, ... ]
  */
-const fetchISSFlyOverTimes = function(coords, callback) {
+const fetchISSFlyOverTimes = function (coords, callback) {
   const url = `https://iss-flyover.herokuapp.com/json/?lat=${coords.latitude}&lon=${coords.longitude}`;
 
   request(url, (error, response, body) => {
@@ -70,7 +71,12 @@ const fetchISSFlyOverTimes = function(coords, callback) {
     }
 
     if (response.statusCode !== 200) {
-      callback(Error(`Status Code ${response.statusCode} when fetching ISS pass times: ${body}`), null);
+      callback(
+        Error(
+          `Status Code ${response.statusCode} when fetching ISS pass times: ${body}`
+        ),
+        null
+      );
       return;
     }
 
@@ -79,5 +85,4 @@ const fetchISSFlyOverTimes = function(coords, callback) {
   });
 };
 
-
-module.exports =  {fetchMyIp, fetchCoordsByIP, fetchISSFlyOverTimes}
+module.exports = { fetchMyIp, fetchCoordsByIP, fetchISSFlyOverTimes };
